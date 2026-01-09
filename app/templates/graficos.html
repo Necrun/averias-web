@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Gráficos Estadísticos{% endblock %}
+
+{% block extra_css %}
+<style>
+.grafico-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.grafico-contenedor {
+    position: relative;
+    height: 320px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>📊 Dashboard PRO</h2>
+
+<!-- KPIs -->
+<div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:20px; margin-bottom:30px;">
+    <div class="grafico-box"><strong>Total avisos</strong><br>{{ estadisticas.kpis.total_avisos }}</div>
+    <div class="grafico-box"><strong>Zonas activas</strong><br>{{ estadisticas.kpis.zonas_activas }}</div>
+    <div class="grafico-box"><strong>Meses activos</strong><br>{{ estadisticas.kpis.meses_activos }}</div>
+    <div class="grafico-box"><strong>% Averías</strong><br>{{ estadisticas.kpis.porcentaje_averias }}%</div>
+</div>
+
+<!-- GRÁFICOS -->
+<div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(450px,1fr)); gap:30px;">
+    <div class="grafico-box">
+        <h3>📍 Averías por zona</h3>
+        <div class="grafico-contenedor"><canvas id="zonasChart"></canvas></div>
+    </div>
+
+    <div class="grafico-box">
+        <h3>📈 Evolución mensual</h3>
+        <div class="grafico-contenedor"><canvas id="mesesChart"></canvas></div>
+    </div>
+
+    <div class="grafico-box">
+        <h3>🥧 Distribución por tipo</h3>
+        <div class="grafico-contenedor"><canvas id="tiposChart"></canvas></div>
+    </div>
+</div>
+
+<hr>
+
+<h3>🔥 Heatmap Zona × Mes</h3>
+<div style="overflow-x:auto;">
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Zona / Mes</th>
+        {% for mes in heatmap.meses %}
+            <th>{{ mes }}</th>
+        {% endfor %}
+    </tr>
+    {% for zona in heatmap.zonas %}
+    <tr>
+        <th>{{ zona }}</th>
+        {% for mes in heatmap.meses %}
+            {% set v = heatmap.data[zona][mes] %}
+            <td style="background: rgba(231,76,60,{{ (v/10) if v else 0 }}); text-align:center;">
+                {{ v }}
+            </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const datos = {{ estadisticas | tojson }};
+
+    new Chart(document.getElementById("zonasChart"), {
+        type: "bar",
+        data: {
+            labels: datos.zonas.labels,
+            datasets: [{ data: datos.zonas.data, backgroundColor: "#3498db" }]
+        }
+    });
+
+    new Chart(document.getElementById("mesesChart"), {
+        type: "line",
+        data: {
+            labels: datos.meses.labels,
+            datasets: [{
+                data: datos.meses.data,
+                borderColor: "#e74c3c",
+                fill: true
+            }]
+        }
+    });
+
+    new Chart(document.getElementById("tiposChart"), {
+        type: "doughnut",
+        data: {
+            labels: datos.tipos.labels,
+            datasets: [{
+                data: datos.tipos.data,
+                backgroundColor: ["#27ae60","#e74c3c","#f39c12","#3498db"]
+            }]
+        }
+    });
+});
+</script>
+{% endblock %}

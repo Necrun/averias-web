@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}📍 Averías por Zonas{% endblock %}
+
+{% block content %}
+
+<style>
+.zonas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.zona-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-left: 5px solid #3498db;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.zona-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.zona-card h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.zona-card h3 a {
+    text-decoration: none;
+    color: #2c3e50;
+}
+
+.zona-card h3 a:hover {
+    text-decoration: underline;
+}
+
+.total {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.zona-card ul {
+    padding-left: 18px;
+    margin: 0;
+}
+
+.zona-card li {
+    font-size: 0.9em;
+    margin-bottom: 6px;
+}
+
+.zona-card li a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.zona-card li a:hover {
+    text-decoration: underline;
+}
+
+.ver-mas {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.ver-mas:hover {
+    text-decoration: underline;
+}
+</style>
+
+<h1>📍 Averías por zonas</h1>
+
+<div class="zonas-grid">
+    {% for zona, avisos in zonas.items() %}
+        <div class="zona-card">
+
+            <!-- Zona clicable -->
+            <h3>
+                📍 <a href="{{ url_for('buscar', zona=zona) }}">{{ zona }}</a>
+            </h3>
+
+            <div class="total">
+                Total de avisos: <strong>{{ avisos|length }}</strong>
+            </div>
+
+            <!-- Lista resumida -->
+            <ul>
+                {% for aviso in avisos[:5] %}
+                    <li>
+                        <a href="{{ url_for('aviso', id=aviso['id']) }}">
+                            {{ aviso['titulo'] }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {% if avisos|length > 5 %}
+                <a class="ver-mas" href="{{ url_for('buscar', zona=zona) }}">
+                    ➕ Ver {{ avisos|length - 5 }} avisos más
+                </a>
+            {% endif %}
+
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

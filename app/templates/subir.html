@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Subir PDFs{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:600px; margin:auto;">
+    <h2>📤 Subir informes PDF</h2>
+
+    <form action="/subir" method="post" enctype="multipart/form-data">
+        <label><strong>Selecciona uno o varios PDFs:</strong></label><br><br>
+
+        <input type="file"
+               name="pdfs[]"
+               accept="application/pdf"
+               multiple
+               required>
+
+        <br><br>
+
+        <button style="
+            background:#1abc9c;
+            color:white;
+            padding:10px 18px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:600;
+        ">
+            🚀 Subir y procesar
+        </button>
+    </form>
+
+    <p style="margin-top:15px; color:#666; font-size:14px;">
+        Puedes seleccionar varios archivos manteniendo <b>Ctrl</b> o <b>Shift</b>.
+    </p>
+</div>
+{% endblock %}

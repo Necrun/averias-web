@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}🔍 Buscar averías{% endblock %}
+
+{% block content %}
+
+<style>
+.filtros {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
+
+.filtros form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.filtros input,
+.filtros select,
+.filtros button {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.95em;
+}
+
+.filtros button {
+    background: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filtros button:hover {
+    background: #2980b9;
+}
+
+.resultados {
+    margin-top: 20px;
+}
+
+.aviso {
+    background: white;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    margin-bottom: 15px;
+    border-left: 5px solid #3498db;
+}
+
+.aviso h3 {
+    margin: 0 0 8px 0;
+}
+
+.aviso h3 a {
+    text-decoration: none;
+    color: #2c3e50;
+}
+
+.aviso h3 a:hover {
+    text-decoration: underline;
+}
+
+.aviso .meta {
+    font-size: 0.85em;
+    color: #777;
+}
+
+.sin-resultados {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    color: #666;
+}
+</style>
+
+<h1>🔍 Buscar averías</h1>
+
+<!-- FILTROS -->
+<div class="filtros">
+    <form method="GET" action="{{ url_for('buscar') }}">
+
+        <input
+            type="text"
+            name="q"
+            placeholder="Texto libre"
+            value="{{ request.args.get('q','') }}"
+        >
+
+        <input
+            type="text"
+            name="zona"
+            placeholder="Zona"
+            value="{{ request.args.get('zona','') }}"
+        >
+
+        <select name="tipo">
+            <option value="">Tipo</option>
+            <option value="20" {% if request.args.get('tipo') == '20' %}selected{% endif %}>Preventivo</option>
+            <option value="30" {% if request.args.get('tipo') == '30' %}selected{% endif %}>Avería</option>
+            <option value="60" {% if request.args.get('tipo') == '60' %}selected{% endif %}>General</option>
+        </select>
+
+        <input
+            type="date"
+            name="fecha_desde"
+            value="{{ request.args.get('fecha_desde','') }}"
+        >
+
+        <input
+            type="date"
+            name="fecha_hasta"
+            value="{{ request.args.get('fecha_hasta','') }}"
+        >
+
+        <button type="submit">🔎 Buscar</button>
+
+    </form>
+</div>
+
+<!-- RESULTADOS -->
+<div class="resultados">
+
+{% if resultados %}
+
+    <p><strong>{{ total_resultados }}</strong> resultado(s) encontrados</p>
+
+    {% for aviso in resultados %}
+        <div class="aviso">
+            <h3>
+                <a href="{{ url_for('aviso', id=aviso['id']) }}">
+                    {{ aviso['titulo'] }}
+                </a>
+            </h3>
+
+            <div class="meta">
+                📅 {{ aviso['fecha'] | format_fecha }}
+                &nbsp;|&nbsp;
+                📍 {{ aviso['zona'] }}
+                &nbsp;|&nbsp;
+                🏷️ {{ aviso['tipo'] }}
+            </div>
+        </div>
+    {% endfor %}
+
+{% else %}
+    <div class="sin-resultados">
+        <h3>😕 No hay resultados</h3>
+        <p>Prueba a cambiar los filtros de búsqueda.</p>
+    </div>
+{% endif %}
+
+</div>
+
+{% endblock %}

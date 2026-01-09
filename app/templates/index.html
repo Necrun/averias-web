@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<h2>📄 Avisos del día</h2>
+
+{% if avisos %}
+    <p style="color:#666">
+        Mostrando avisos del día actual o del último PDF subido.
+    </p>
+
+    <div style="display:grid; gap:15px;">
+        {% for aviso in avisos %}
+            <div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.08)">
+                <strong>{{ aviso[3] }}</strong><br>
+                <small>
+                    📅 {{ aviso[1] | format_fecha }} |
+                    📍 {{ aviso[2] }}
+                </small>
+                <br><br>
+                <a href="{{ url_for('aviso', id=aviso[0]) }}">👉 Ver aviso</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+    <a href="{{ url_for('historico') }}">📚 Ver histórico completo</a>
+
+{% else %}
+    <p>No hay avisos todavía.</p>
+{% endif %}
+{% endblock %}

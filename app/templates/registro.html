@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+</head>
+<body>
+
+<h1>📝 Registro de usuario</h1>
+
+<form method="POST" action="{{ url_for('registro') }}">
+    <p>
+        <label>Usuario</label><br>
+        <input type="text" name="username" required>
+    </p>
+
+    <p>
+        <label>Contraseña</label><br>
+        <input type="password" name="password" required>
+    </p>
+
+    <p>
+        <label>Nombre</label><br>
+        <input type="text" name="nombre">
+    </p>
+
+    <p>
+        <label>Email</label><br>
+        <input type="email" name="email">
+    </p>
+
+    <button type="submit">Crear cuenta</button>
+</form>
+
+<p>
+    <a href="{{ url_for('login') }}">⬅ Volver al login</a>
+</p>
+
+</body>
+</html>

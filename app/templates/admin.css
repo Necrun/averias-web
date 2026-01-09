@@ -1,0 +1,33 @@
+.admin-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.crear-usuario input,
+.crear-usuario select {
+    margin: 5px;
+    padding: 6px;
+}
+
+button {
+    padding: 6px 12px;
+}
+
+button.danger {
+    background: #e74c3c;
+    color: white;
+    border: none;
+}

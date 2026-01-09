@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Averías{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* ---------- RESET BÁSICO ---------- */
+* {
+    box-sizing: border-box;
+}
+
+/* ---------- NAV ---------- */
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+nav a {
+    text-decoration: none;
+    font-size: 14px;
+}
+
+nav span {
+    margin-left: auto;
+}
+
+/* ---------- CONTENIDO ---------- */
+main {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* ---------- TABLAS ---------- */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* ---------- GRÁFICOS ---------- */
+.grafico-contenedor {
+    position: relative;
+    width: 100%;
+    height: 320px;
+}
+
+/* ---------- MÓVIL ---------- */
+@media (max-width: 768px) {
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav span {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    h1, h2, h3 {
+        font-size: 18px;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    th, td {
+        padding: 6px;
+        white-space: nowrap;
+    }
+
+    .grafico-contenedor {
+        height: 240px;
+    }
+}
+</style>
+
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav style="background:#2c3e50; padding:10px; color:white;">
+    <a href="/" style="color:white; margin-right:10px;">Inicio</a>
+    <a href="/zonas" style="color:white; margin-right:10px;">Zonas</a>
+    <a href="/buscar" style="color:white; margin-right:10px;">Buscar</a>
+    <a href="/historico" style="color:white; margin-right:10px;">Histórico</a>
+    <a href="/graficos" style="color:white; margin-right:10px;">Gráficos</a>
+
+    {% if user and user.rol in ['admin','editor'] %}
+        <a href="/subir" style="color:#1abc9c; margin-right:10px;">Subir PDF</a>
+    {% endif %}
+
+    {% if user and user.rol == 'admin' %}
+        <a href="/admin" style="color:#f39c12;">Admin</a>
+    {% endif %}
+
+    <span style="float:right;">
+        {{ user.nombre }} |
+        <a href="/logout" style="color:#e74c3c;">Salir</a>
+    </span>
+</nav>
+
+<main style="padding:20px;">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ⚠️ ESTO ES CLAVE PARA LOS GRÁFICOS -->
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Administración{% endblock %}
+
+{% block content %}
+<h2>🛠 Panel de Administración</h2>
+
+<div class="card">
+    <h3>👥 Usuarios</h3>
+
+    <table style="width:100%; border-collapse:collapse;">
+        <thead>
+            <tr style="border-bottom:1px solid #ccc;">
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for u in usuarios %}
+            <tr style="border-bottom:1px solid #eee;">
+                <td>{{ u.username }}</td>
+                <td>{{ u.nombre }}</td>
+                <td>
+                    <form action="{{ url_for('admin_cambiar_rol', user_id=u.id) }}" method="post">
+                        <select name="rol" onchange="this.form.submit()">
+                            <option value="lector" {% if u.rol == 'lector' %}selected{% endif %}>lector</option>
+                            <option value="editor" {% if u.rol == 'editor' %}selected{% endif %}>editor</option>
+                            <option value="admin" {% if u.rol == 'admin' %}selected{% endif %}>admin</option>
+                        </select>
+                    </form>
+                </td>
+                <td>
+                    {% if u.id != user.id %}
+                    <form action="{{ url_for('admin_eliminar', user_id=u.id) }}" method="post"
+                          onsubmit="return confirm('¿Eliminar usuario?');">
+                        <button style="
+                            background:#ef4444;
+                            color:white;
+                            border:none;
+                            padding:6px 10px;
+                            border-radius:6px;
+                            cursor:pointer;">
+                            ❌ Eliminar
+                        </button>
+                    </form>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<br>
+
+<div class="card" style="max-width:500px;">
+    <h3>➕ Crear usuario</h3>
+
+    <form action="{{ url_for('admin_crear_usuario') }}" method="post">
+        <input name="username" placeholder="Usuario" required><br><br>
+        <input name="nombre" placeholder="Nombre"><br><br>
+        <input name="email" placeholder="Email"><br><br>
+        <input name="password" type="password" placeholder="Contraseña" required><br><br>
+
+        <select name="rol">
+            <option value="lector">lector</option>
+            <option value="editor">editor</option>
+            <option value="admin">admin</option>
+        </select><br><br>
+
+        <button style="
+            background:#2563eb;
+            color:white;
+            padding:8px 14px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;">
+            Crear usuario
+        </button>
+    </form>
+</div>
+{% endblock %}
