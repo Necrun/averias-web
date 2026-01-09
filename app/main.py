@@ -9,11 +9,14 @@ from app import models
 # CONFIGURACIÓN APP
 # --------------------------------------------------
 app = Flask(__name__)
-app.secret_key = "clave-secreta-cambiar-en-produccion"
-app.config["UPLOAD_FOLDER"] = "pdfs"
+app.secret_key = os.getenv("SECRET_KEY", "dev")
+
+UPLOAD_BASE = os.getenv("UPLOAD_DIR", "/tmp/pdfs")
+app.config["UPLOAD_FOLDER"] = UPLOAD_BASE
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
 
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
 @app.before_first_request
 def init_database():
     models.init_db()
