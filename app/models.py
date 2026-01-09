@@ -3,7 +3,11 @@ import sqlite3
 import os
 from datetime import datetime
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "db", "avisos.db")
+BASE_DIR = os.getenv("DB_DIR", "/tmp")
+os.makedirs(BASE_DIR, exist_ok=True)
+
+DB_PATH = os.path.join(BASE_DIR, "avisos.db")
+
 
 def get_connection():
     """Obtiene una conexión a la base de datos"""

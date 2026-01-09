@@ -14,7 +14,10 @@ app.config["UPLOAD_FOLDER"] = "pdfs"
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
 
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
-models.init_db()
+@app.before_first_request
+def init_database():
+    models.init_db()
+
 
 # --------------------------------------------------
 # FILTROS JINJA
