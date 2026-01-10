@@ -13,6 +13,11 @@ app = Flask(__name__)
 # 🔑 SECRET KEY (OBLIGATORIO EN PRODUCCIÓN)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
+UPLOAD_BASE = os.environ.get("UPLOAD_DIR", "/tmp/pdfs")
+app.config["UPLOAD_FOLDER"] = UPLOAD_BASE
+
+os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
 _db_initialized = False
 
 @app.before_request
