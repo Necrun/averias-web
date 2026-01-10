@@ -1,5 +1,4 @@
-﻿web:
-gunicorn
-app.main:app
+﻿web: gunicorn app.main:app
+
 
 
