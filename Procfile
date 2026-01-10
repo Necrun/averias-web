@@ -1,7 +1,0 @@
-gunicorn app.main:app
-
-
-
-
-
-
