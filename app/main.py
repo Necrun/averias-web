@@ -288,6 +288,22 @@ def admin_panel():
     user = models.obtener_usuario_por_id(session["user_id"])
     return render_template("admin_panel.html", usuarios=usuarios, user=user)
 
+def obtener_todos_usuarios():
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT id, username, nombre, email, rol FROM usuarios")
+    rows = c.fetchall()
+    conn.close()
+    return [
+        {
+            "id": r[0],
+            "username": r[1],
+            "nombre": r[2],
+            "email": r[3],
+            "rol": r[4]
+        } for r in rows
+    ]
+
 # --------------------------------------------------
 # PERFIL
 # --------------------------------------------------
