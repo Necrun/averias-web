@@ -17,9 +17,7 @@ app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
 
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-@app.before_first_request
-def init_database():
-    models.init_db()
+models.init_db()
 
 
 # --------------------------------------------------
