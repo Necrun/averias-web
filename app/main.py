@@ -10,6 +10,9 @@ from app import models
 # --------------------------------------------------
 app = Flask(__name__)
 
+# 🔑 SECRET KEY (OBLIGATORIO EN PRODUCCIÓN)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
+
 _db_initialized = False
 
 @app.before_request
