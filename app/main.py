@@ -288,21 +288,26 @@ def admin_panel():
     user = models.obtener_usuario_por_id(session["user_id"])
     return render_template("admin_panel.html", usuarios=usuarios, user=user)
 
-def obtener_todos_usuarios():
-    conn = get_db()
-    c = conn.cursor()
-    c.execute("SELECT id, username, nombre, email, rol FROM usuarios")
-    rows = c.fetchall()
-    conn.close()
-    return [
-        {
-            "id": r[0],
-            "username": r[1],
-            "nombre": r[2],
-            "email": r[3],
-            "rol": r[4]
-        } for r in rows
-    ]
+
+@app.route("/admin/rol/<int:user_id>", methods=["POST"])
+@requiere_rol("admin")
+def admin_cambiar_rol(user_id):
+    nuevo_rol = request.form.get("rol")
+    if nuevo_rol in ("lector", "editor", "admin"):
+        models.actualizar_rol_usuario(user_id, nuevo_rol)
+        flash("Rol actualizado", "success")
+    return redirect(url_for("admin_panel"))
+
+
+@app.route("/admin/eliminar/<int:user_id>", methods=["POST"])
+@requiere_rol("admin")
+def admin_eliminar(user_id):
+    if user_id != session["user_id"]:
+        models.eliminar_usuario(user_id)
+        flash("Usuario eliminado", "success")
+    else:
+        flash("No puedes eliminarte a ti mismo", "error")
+    return redirect(url_for("admin_panel"))
 
 # --------------------------------------------------
 # PERFIL
