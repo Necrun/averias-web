@@ -10,7 +10,14 @@ from app import models
 # --------------------------------------------------
 app = Flask(__name__)
 
-models.init_db()
+_db_initialized = False
+
+@app.before_request
+def init_db_once():
+    global _db_initialized
+    if not _db_initialized:
+        models.init_db()
+        _db_initialized = True
 
 
 # --------------------------------------------------
