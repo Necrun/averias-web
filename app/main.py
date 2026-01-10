@@ -279,6 +279,16 @@ def subir_pdf():
     return render_template("subir.html", user=user)
 
 # --------------------------------------------------
+# ADMIN
+# --------------------------------------------------
+@app.route("/admin")
+@requiere_rol("admin")
+def admin_panel():
+    usuarios = models.obtener_todos_usuarios()
+    user = models.obtener_usuario_por_id(session["user_id"])
+    return render_template("admin_panel.html", usuarios=usuarios, user=user)
+
+# --------------------------------------------------
 # PERFIL
 # --------------------------------------------------
 @app.route("/perfil")
