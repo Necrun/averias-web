@@ -309,6 +309,25 @@ def admin_eliminar(user_id):
         flash("No puedes eliminarte a ti mismo", "error")
     return redirect(url_for("admin_panel"))
 
+@app.route("/admin/crear-usuario", methods=["POST"])
+@requiere_rol("admin")
+def admin_crear_usuario():
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "")
+    nombre = request.form.get("nombre", "")
+    email = request.form.get("email", "")
+    rol = request.form.get("rol", "lector")
+
+    if len(username) < 3 or len(password) < 6:
+        flash("Usuario o contraseña inválidos", "error")
+    else:
+        if models.crear_usuario(username, password, rol, nombre, email):
+            flash("Usuario creado correctamente", "success")
+        else:
+            flash("El usuario ya existe", "error")
+
+    return redirect(url_for("admin_panel"))
+
 # --------------------------------------------------
 # PERFIL
 # --------------------------------------------------
