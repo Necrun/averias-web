@@ -9,13 +9,6 @@ from app import models
 # CONFIGURACIÓN APP
 # --------------------------------------------------
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "dev")
-
-UPLOAD_BASE = os.getenv("UPLOAD_DIR", "/tmp/pdfs")
-app.config["UPLOAD_FOLDER"] = UPLOAD_BASE
-app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
-
-os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
 models.init_db()
 
